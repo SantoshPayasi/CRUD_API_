@@ -9,5 +9,5 @@ const db = new sqlite.Database(PATH, sqlite.OPEN_READWRITE, (err)=>{
         console.log('database has been created');
     }
 })
-const sql = `CREATE TABLE tasks(ID INTEGER PRIMARY KEY, title, discription)`;
+const sql = `CREATE TABLE details(ID INTEGER PRIMARY KEY, name, email)`;
 db.run(sql)

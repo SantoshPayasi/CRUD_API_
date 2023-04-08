@@ -17,8 +17,8 @@ const db = new sqlite.Database(PATH, sqlite.OPEN_READWRITE, (err) => {
 
 app.post('/add', (req, res) => {
     try {
-        const { title, description } = req.body
-        db.run('INSERT INTO tasks (title, discription) VALUES (?, ?)', [title, description], (err) => {
+        const { name, email } = req.body
+        db.run('INSERT INTO details (name, email) VALUES (?, ?)', [name, email], (err) => {
             if (err) return console.log(err);
         });
         res.json({
@@ -35,7 +35,7 @@ app.post('/add', (req, res) => {
 })
 
 app.get('/read', (req, res) => {
-    db.all('SELECT * FROM tasks', (err, rows) => {
+    db.all('SELECT * FROM details', (err, rows) => {
         if (err) {
             console.log(err)
             return res.json({
@@ -45,7 +45,6 @@ app.get('/read', (req, res) => {
         }
 
         else {
-            console.log(rows)
             res.status(200).send(rows)
         }
     })
@@ -56,7 +55,7 @@ app.get('/read', (req, res) => {
 
 app.get('/read/:id', (req, res) => {
     const id = req.params.id;
-    db.all('SELECT * FROM tasks WHERE id = ?', [id], (err, row) => {
+    db.all('SELECT * FROM details WHERE id = ?', [id], (err, row) => {
         if (err) {
             console.log(err)
             res.json({
@@ -85,8 +84,8 @@ app.get('/read/:id', (req, res) => {
 // Updating data of database from exising id
 app.put('/update/:id', (req, res) => {
     const id = req.params.id;
-    const { title, description } = req.body
-    db.run('UPDATE tasks SET title = ?, discription = ? WHERE id = ?', [title, description, id], (err) => {
+    const { name, email } = req.body
+    db.run('UPDATE details SET name = ?, email = ? WHERE id = ?', [name, email, id], (err) => {
         if (err) {
             console.log(err)
             res.json({
@@ -105,7 +104,7 @@ app.put('/update/:id', (req, res) => {
 
 app.delete('/remove/:id', (req, res) => {
     const id = req.params.id;
-    db.run('DELETE FROM tasks WHERE id = ?', [id], (err) => {
+    db.run('DELETE FROM details WHERE id = ?', [id], (err) => {
         if (err) {
             res.status(500).send(err)
         }
