@@ -6,7 +6,11 @@ const app = express()
 const cors = require('cors')
 app.use(bodyParser.json())
 app.use(cors())
+
+// Path for database
 const PATH = path.join(__dirname, 'Tasks.db')
+
+// Initilizing databse
 const db = new sqlite.Database(PATH, sqlite.OPEN_READWRITE, (err) => {
     if (err) return console.log(err);
     else {
@@ -14,6 +18,7 @@ const db = new sqlite.Database(PATH, sqlite.OPEN_READWRITE, (err) => {
     }
 })
 
+// Isersting data in database
 
 app.post('/add', (req, res) => {
     try {
@@ -33,6 +38,8 @@ app.post('/add', (req, res) => {
         })
     }
 })
+
+// Retrieving whole data from database
 
 app.get('/read', (req, res) => {
     db.all('SELECT * FROM details', (err, rows) => {
@@ -102,6 +109,7 @@ app.put('/update/:id', (req, res) => {
     })
 })
 
+// Deleting data from database
 app.delete('/remove/:id', (req, res) => {
     const id = req.params.id;
     db.run('DELETE FROM details WHERE id = ?', [id], (err) => {
@@ -114,6 +122,8 @@ app.delete('/remove/:id', (req, res) => {
 
     })
 })
+
+// Listening api in perticular port
 app.listen(3000, (err) => {
     if (err) return console.log(err);
     return console.log("It is successfully running")
